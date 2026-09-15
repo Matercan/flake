@@ -8,6 +8,7 @@
     system = "x86_64-linux";
 
     specialArgs = {
+      system = "x86_64-linux";
       hostName = "hyprland-btw";
       inherit self;
     };

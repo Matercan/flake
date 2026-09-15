@@ -9,6 +9,8 @@
 
     specialArgs = {
       hostName = "server";
+      system = "x86_64-linux";
+      inherit self;
     };
 
     modules = with self.nixosModules; [

@@ -3,21 +3,23 @@
   ...
 }:
 {
-  flake.nixosModules.user = {
-    users.users = {
-      root = {
-        shell = self.packages.zsh;
-      };
-      lili = {
-        isNormalUser = true;
-        initialPassword = "password";
-        shell = self.packages.zsh;
-        description = "lili";
-        extraGroups = [
-          "root"
-          "wheel"
-        ];
+  flake.nixosModules.user =
+    { system, ... }:
+    {
+      users.users = {
+        root = {
+          shell = self.packages.${system}.zsh;
+        };
+        lili = {
+          isNormalUser = true;
+          initialPassword = "password";
+          shell = self.packages.${system}.zsh;
+          description = "lili";
+          extraGroups = [
+            "root"
+            "wheel"
+          ];
+        };
       };
     };
-  };
 }
