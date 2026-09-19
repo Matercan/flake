@@ -5,7 +5,6 @@
       pkgs,
       self',
       lib,
-      hostName,
       ...
     }:
     {
@@ -18,7 +17,7 @@
             "switch"
             "."
             "-H"
-            hostName
+            "hyprland-btw"
           ];
         }
       );

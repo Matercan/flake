@@ -4,11 +4,11 @@
 }:
 {
   flake.nixosModules.user =
-    { system, ... }:
+    { system, self', ... }:
     {
       users.users = {
         root = {
-          shell = self.packages.${system}.zsh;
+          shell = self'.packages.${system}.zsh;
         };
         lili = {
           isNormalUser = true;
