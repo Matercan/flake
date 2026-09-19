@@ -15,6 +15,13 @@
           extraPackages = with pkgs; [
             eza
             asciiquarium-transparent
+            oh-my-zsh
+            zsh-fzf-tab
+            nix-zsh-completions
+            zsh-completions
+            zsh-autosuggestions
+            zsh-syntax-highlighting
+            zsh-powerlevel10k
           ];
 
           settings = {
@@ -37,14 +44,6 @@
               };
             };
 
-            completion = {
-              enable = true;
-              colors = true;
-              extraCompletions = true;
-              caseInsensitive = true;
-              fuzzySearch = true;
-            };
-
             history = {
               size = 1000;
               file = "~/.zsh_history";
@@ -58,67 +57,69 @@
           };
 
           extraRC = /* bash */ ''
-            echo "おかえりなさ～い!♡"
+             echo "おかえりなさ～い!♡"
 
-            if [[ -r "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
-              source "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh"
-            fi
+             fpath=(${pkgs.nix-zsh-completions}/share/zsh/site-functions ''${fpath})
+             fpath=(${pkgs.zsh-completions}/share/zsh/site-functions ''${fpathfpath})
+             autoload -Uz compinit && compinit
 
-            ZINIT_HOME="''${XDG_DATA_HOME:-$HOME/.local/share}/zinit/zinit.git"
+             source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/git/git.plugin.zsh
+             source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/sudo/sudo.plugin.zsh
+             source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/rust/rust.plugin.zsh
+             source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/foot/foot.plugin.zsh
+             source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/command-not-found/command-not-found.
 
-            if [ ! -d "$ZINIT_HOME" ]; then 
-              mkdir -p "''${ZINIT_HOME%/*}"
-              git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
-            fi
+             source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh
 
-            source "$ZINIT_HOME/zinit.zsh"
+             source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-            zinit light zsh-users/zsh-syntax-highlighting
-            zinit light zsh-users/zsh-autosuggestions
-            zinit light Aloxaf/fzf-tab
-            zinit ice depth=1; zinit light romkatv/powerlevel10k
+             # 6. Morpho (Your little screensaver thing~) ♡
+             source ${pkgs.zsh-morpho}/share/zsh-morpho/morpho.plugin.zsh
+             zstyle ":morpho" screen-saver "${pkgs.asciiquarium-transparent}/bin/asciiquarium-transparent"
+             zstyle ":morpho" arguments "-t"
+             zstyle ":morpho" delay "290"
+             zstyle ":morpho" check-interval "60"
 
-            zinit cdreplay -q
+             if [[ -r "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
+               source "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh"
+             fi
 
-            # Cursor
-            function zle-keymap-select {
-                if [[ ''${KEYMAP} == vicmd ]] || [[ $1 = "block" ]]; then
-                    echo -ne "\e[1 q"
-                elif [[ ''${KEYMAP} == main ]] || [[ ''${KEYMAP} == viins ]] || [[ ''${KEYMAP} == "" ]] || [[ $1 = "beam" ]]; then
-                    echo -ne "\e[5 q"
-                fi
-            }
+             # Cursor
+             function zle-keymap-select {
+                 if [[ ''${KEYMAP} == vicmd ]] || [[ $1 = "block" ]]; then
+                     echo -ne "\e[1 q"
+                 elif [[ ''${KEYMAP} == main ]] || [[ ''${KEYMAP} == viins ]] || [[ ''${KEYMAP} == "" ]] || [[ $1 = "beam" ]]; then
+                     echo -ne "\e[5 q"
+                 fi
+             }
 
-            function zle-line-init {
-                echo -ne "\e[5 q"
-            }
+             function zle-line-init {
+                 echo -ne "\e[5 q"
+             }
 
-            function zle-line-finish {
-                echo -ne "\e[1 q"
-            }
+             function zle-line-finish {
+                 echo -ne "\e[1 q"
+             }
 
-            echo -ne "\e[5 q"
+             echo -ne "\e[5 q"
 
-            zle -N zle-keymap-select
-            zle -N zle-line-init
-            zle -N zle-line-finish
+             zle -N zle-keymap-select
+             zle -N zle-line-init
+             zle -N zle-line-finish
 
-            lfcd () {
-                cd "$(command lf -print-last-dir "$@")"
-            }
-            alias lf='lfcd'
+             lfcd () {
+                 cd "$(command lf -print-last-dir "$@")"
+             }
+             alias lf='lfcd'
 
-            zinit light z-shell/zsh-morpho
-            zstyle ":morpho" screen-saver "${lib.getExe pkgs.asciiquarium-transparent}"
-            zstyle ":morpho" arguments "-t"
-            zstyle ":morpho" delay "290"
-            zstyle ":morpho" check-interval "60"
 
-            [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+             [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-            bindkey -e
-            bindkey '^p' history-search-backward
-            bindkey '^n' history-search-forward
+             bindkey -e
+             bindkey '^p' history-search-backward
+             bindkey '^n' history-search-forward
+
+            source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-hig
           '';
         }).wrapper;
     };

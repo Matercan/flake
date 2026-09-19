@@ -28,12 +28,19 @@
         settings.PermitRootLogin = "yes";
       };
 
-      environment.systemPackages = with pkgs; [
-        vim
-        unzip
-        curl
-        wget
-      ];
+      environment.systemPackages =
+        with pkgs;
+        [
+          vim
+          unzip
+          curl
+          wget
+        ]
+        ++ (with self.packages; [
+          bat
+          zsh
+          flamegraph
+        ]);
 
       system.stateVersion = "26.05";
     };
