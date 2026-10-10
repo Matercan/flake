@@ -4,12 +4,12 @@
 {
   fileSystems = {
     "/" = {
-      device = "";
+      device = "device";
       fsType = "ex4";
     };
 
     "/boot" = {
-      device = "";
+      device = "device";
       fsType = "vfat";
       options = [
         "fmask=0022"

@@ -7,6 +7,14 @@
       lib,
       ...
     }:
+    let zsh-morpho = pkgs.fetchFromGitHub {
+      owner = "zdharma-continuum";
+      repo = "zsh-morpho";
+      rev = "410c9b41bf1b9ef51c87b62ec5f50655a0ec1eb4";
+      sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    };
+
+    in
     {
       packages.zsh =
         (inputs.wrappers.wrapperModules.zsh.apply {
@@ -73,8 +81,7 @@
 
              source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-             # 6. Morpho (Your little screensaver thing~) ♡
-             source ${pkgs.zsh-morpho}/share/zsh-morpho/morpho.plugin.zsh
+             source ${zsh-morpho}/zsh-morpho.plugin.zsh
              zstyle ":morpho" screen-saver "${pkgs.asciiquarium-transparent}/bin/asciiquarium-transparent"
              zstyle ":morpho" arguments "-t"
              zstyle ":morpho" delay "290"
