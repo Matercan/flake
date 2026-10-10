@@ -256,8 +256,6 @@
         name = "nvim-lspconfig";
         package = pkgs.vimPlugins.nvim-lspconfig;
         config = /* lua */ ''
-          print("DEBUG: Starting Native LSP Setup...")
-
           vim.opt.completeopt = { "menu", "menuone", "noselect", "popup" }
 
           local orig_open_floating_preview = vim.lsp.util.open_floating_preview
@@ -344,7 +342,6 @@
             float = { border = "single", source = "always" },
           })
 
-          print("DEBUG: Native LSP Setup Complete!")
         '';
       };
 
