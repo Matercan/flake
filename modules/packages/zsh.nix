@@ -8,13 +8,7 @@
       ...
     }:
     let
-      zsh-morpho = pkgs.fetchFromGitHub {
-        owner = "zdharma-continuum";
-        repo = "zsh-morpho";
-        rev = "410c9b41bf1b9ef51c87b62ec5f50655a0ec1eb4";
-        sha256 = "sha256-/x4BT8AHwz25ttRNAVgqs1NVCe8ajVJe3efjUZzS080=";
-      };
-
+      zsh-morpho = inputs.zsh-morpho;
     in
     {
       packages.zsh =
@@ -69,7 +63,7 @@
             echo "おかえりなさ～い!♡"
 
             if [[ -z $WAYLAND_DISPLAY && $XDG_VTNR -eq 1 ]]; then
-              exec Hyprland
+              exec start-hyprland 
             fi
 
             # Powerlevel10k ♡

@@ -1,0 +1,85 @@
+{
+  "$declared": {
+    "flake-parts": "github:hercules-ci/flake-parts",
+    "hyprland": "github:hyprwm/Hyprland",
+    "import-tree": "github:denful/import-tree",
+    "nixpkgs": "github:NixOS/nixpkgs/nixos-unstable",
+    "quickshell": "git+https://git.outfoxxed.me/outfoxxed/quickshell",
+    "tack": "github:manic-systems/tack",
+    "telescope-cmdline": "github:jonarrien/telescope-cmdline.nvim",
+    "telescope-fzf": "github:nvim-telescope/telescope-fzf-native.nvim",
+    "wrappers": "github:Lassulus/wrappers"
+  },
+  "flake-parts": {
+    "type": "github",
+    "owner": "hercules-ci",
+    "repo": "flake-parts",
+    "rev": "024633cd702b10285db5cb19b40ad48d2399ba60",
+    "narHash": "sha256-zTwuwezD0w3hpga6a6P8emidzAZFyWqlNeRBlpWOOl8=",
+    "lastModified": 1790898470
+  },
+  "hyprland": {
+    "type": "github",
+    "owner": "hyprwm",
+    "repo": "Hyprland",
+    "rev": "663b29b846e4bad17cfa29941f6d2fbb6b61f139",
+    "narHash": "sha256-EuTde/DbLBZ0nm8Ctj4Il3M5SKsWAKeDITvUuatu5+g=",
+    "lastModified": 1791545463
+  },
+  "import-tree": {
+    "type": "github",
+    "owner": "denful",
+    "repo": "import-tree",
+    "rev": "eb1b52eaecc57f7c136d07ae8a93e724dfecac46",
+    "narHash": "sha256-ljEMTXP/rH0tOvDzc9gzwww6KcHRPRnEHzd9lK48V7s=",
+    "lastModified": 1788467110
+  },
+  "nixpkgs": {
+    "type": "github",
+    "owner": "NixOS",
+    "repo": "nixpkgs",
+    "rev": "e7439b6b14ad3cc35d05608ebca9bce01a25f5f8",
+    "narHash": "sha256-H83yz/do+hjOO0uujHyH8RgtIQP2v7Mw+cLwcZK/xKc=",
+    "lastModified": 1791456040
+  },
+  "quickshell": {
+    "type": "git",
+    "url": "https://git.outfoxxed.me/outfoxxed/quickshell",
+    "ref": "HEAD",
+    "rev": "4f508be500dea6e5732cc3d50382a0048b17e7b1",
+    "narHash": "sha256-lPbqsyAD5ZoGFMZ1eqAlTULfeP5Nwhy+XvOowF7BE+E=",
+    "lastModified": 1791448974
+  },
+  "tack": {
+    "type": "github",
+    "owner": "manic-systems",
+    "repo": "tack",
+    "rev": "5957ec0bd3df490a06dab467337152ae75977585",
+    "narHash": "sha256-dkuO01AoiMwzwY5DtEPDRyQYKjD3RRPZ8evLLYfEeY4=",
+    "lastModified": 1791612427
+  },
+  "telescope-cmdline": {
+    "type": "github",
+    "owner": "jonarrien",
+    "repo": "telescope-cmdline.nvim",
+    "rev": "b1c330835563c9628ce7c095cf20772f22f93f07",
+    "narHash": "sha256-UkbQkOK3vKtmwBgZltj17vqdhDL8UvC27vTAyQ2EGH0=",
+    "lastModified": 1757874925
+  },
+  "telescope-fzf": {
+    "type": "github",
+    "owner": "nvim-telescope",
+    "repo": "telescope-fzf-native.nvim",
+    "rev": "b25b749b9db64d375d782094e2b9dce53ad53a40",
+    "narHash": "sha256-FMzAAkS/TgdINK/YuadHXikFcTYtgYeXcEL0jDvWKzk=",
+    "lastModified": 1778077831
+  },
+  "wrappers": {
+    "type": "github",
+    "owner": "Lassulus",
+    "repo": "wrappers",
+    "rev": "d814b84aa832bb01630439c6b3566652da83a786",
+    "narHash": "sha256-Wr358xHHD0XHNzl2V6bzHJRvnrwLpa1/o+AjdYKDs1g=",
+    "lastModified": 1791312500
+  }
+}

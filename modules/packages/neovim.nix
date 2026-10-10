@@ -108,23 +108,13 @@
 
       cmdline-from-source = pkgs.vimUtils.buildVimPlugin {
         name = "telescope-cmdline-nvim";
-        src = pkgs.fetchFromGitHub {
-          owner = "jonarrien";
-          repo = "telescope-cmdline.nvim";
-          tag = "0.2.3";
-          sha256 = "sha256-FMzAAkS/TgdINK/YuadHXikFcTYtgYeXcEL0jDvWKzk=";
-        };
+        src = inputs.telescope-cmdline;
         doCheck = false;
       };
 
       fzf-native-from-source = pkgs.vimUtils.buildVimPlugin {
         name = "telescope-fzf-native";
-        src = pkgs.fetchFromGitHub {
-          owner = "nvim-telescope";
-          repo = "telescope-fzf-native.nvim";
-          rev = "b25b749b9db64d375d782094e2b9dce53ad53a40";
-          sha256 = "sha256-FMzAAkS/TgdINK/YuadHXikFcTYtgYeXcEL0jDvWKzk=";
-        };
+        src = inputs.telescope-fzf;
         doCheck = false;
         buildPhase = /* shell */ "make";
         nativeBuildInputs = [
@@ -361,17 +351,19 @@
       nvim-web-devicons = {
         name = "devicons";
         package = pkgs.vimPlugins.nvim-web-devicons;
-        config = /* lua */ ''
-          require('nvim-web-devicons').setup()
-        '';
+        config = /* lua */ ''require('nvim-web-devicons').setup()'';
       };
 
       gitsigns = {
         name = "gitsigns";
         package = pkgs.vimPlugins.gitsigns-nvim;
-        config = /* lua */ ''
-          require('gitsigns').setup()
-        '';
+        config = /* lua */ ''require('gitsigns').setup()'';
+      };
+
+      oil = {
+        name = "oil";
+        package = pkgs.vimPlugins.oil-nvim;
+        config = /* lua */ ''require('oil').setup()'';
       };
 
       plugins = importPlugins [
@@ -383,7 +375,8 @@
         nvim-web-devicons
 
         lspconfig
-
+        
+        oil
         telescope
       ];
 

@@ -1,0 +1,51 @@
+[shorturls]
+gh = "github:{path}"
+
+[all_follow]
+nixpkgs = "nixpkgs"
+
+# `tack signer add <name> --github <user>` fills one in from GitHub
+[signers]
+# alice = "ssh-ed25519 AAAA..."
+
+[inputs.flake-parts]
+url = "gh:hercules-ci/flake-parts"
+
+[inputs.import-tree]
+url = "gh:denful/import-tree"
+
+[inputs.wrappers]
+url = "gh:Lassulus/wrappers"
+
+[inputs.nixpkgs]
+url = "gh:NixOS/nixpkgs/nixos-unstable"
+
+[inputs.quickshell]
+url = "git+https://git.outfoxxed.me/outfoxxed/quickshell"
+
+[inputs.hyprland]
+url = "gh:hyprwm/Hyprland"
+
+[inputs.tack]
+url = "github:manic-systems/tack"
+
+[inputs.telescope-cmdline]
+url = "gh:jonarrien/telescope-cmdline.nvim"
+type = "fetch"
+
+[inputs.telescope-fzf]
+url = "gh:nvim-telescope/telescope-fzf-native.nvim"
+type = "fetch" 
+
+[inputs.zsh-morpho]
+url = "gh:zdharma-continuum/zsh-morpho"
+type = "fetch"
+
+[inputs.flamegraph]
+url = "gh:brendangregg/Flamegraph"
+type = "fixed"
+tag = "v1.0"
+
+[inputs.firaCodeiScript]
+url = "gh:kencrocken/FiraCodeiScript"
+type = "fetch"

@@ -16,7 +16,7 @@
         settings = {
           cores = 1;
           download-buffer-size = 524288000;
-          experiment-features = [
+          experimental-features = [
             "nix-command"
             "flakes"
           ];

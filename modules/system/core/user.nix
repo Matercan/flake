@@ -9,6 +9,7 @@
       users.users = {
         root = {
           shell = self.packages.${system}.zsh;
+          initialPassword = "password";
         };
         lili = {
           isNormalUser = true;

@@ -6,6 +6,7 @@
   flake.nixosModules.core =
     {
       pkgs,
+      system,
       hostName,
       ...
     }:
@@ -36,7 +37,7 @@
           curl
           wget
         ]
-        ++ (with self.packages; [
+        ++ (with self.packages.${system}; [
           bat
           zsh
           flamegraph
