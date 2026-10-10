@@ -41,7 +41,7 @@
     ];
   };
   boot.loader.efi.efiSysMountPoint = "/boot";
-  bluetooth.enable = true;
+  hardware.bluetooth.enable = true;
   services.blueman.enable = true;
 
   swapDevices = [

@@ -7,10 +7,12 @@
     "import-tree": "github:denful/import-tree",
     "nixpkgs": "github:NixOS/nixpkgs/nixos-unstable",
     "quickshell": "git+https://git.outfoxxed.me/outfoxxed/quickshell",
+    "spicetify": "github:Gerg-L/spicetify-nix",
     "tack": "github:manic-systems/tack",
     "telescope-cmdline": "github:jonarrien/telescope-cmdline.nvim",
     "telescope-fzf": "github:nvim-telescope/telescope-fzf-native.nvim",
     "wrappers": "github:Lassulus/wrappers",
+    "zen-browser": "github:youwen5/zen-browser-flake",
     "zsh-morpho": "github:zdharma-continuum/zsh-morpho"
   },
   "firaCodeiScript": {
@@ -71,6 +73,14 @@
     "narHash": "sha256-lPbqsyAD5ZoGFMZ1eqAlTULfeP5Nwhy+XvOowF7BE+E=",
     "lastModified": 1791448974
   },
+  "spicetify": {
+    "type": "github",
+    "owner": "Gerg-L",
+    "repo": "spicetify-nix",
+    "rev": "32d97b6b3c3401e5d0e474c82e764f8f9bf35b86",
+    "narHash": "sha256-N4ZWEoceF9U+np24Pzi8OjJwqjoe36zHUR31pEhUKng=",
+    "lastModified": 1791109926
+  },
   "tack": {
     "type": "github",
     "owner": "manic-systems",
@@ -102,6 +112,14 @@
     "rev": "d814b84aa832bb01630439c6b3566652da83a786",
     "narHash": "sha256-Wr358xHHD0XHNzl2V6bzHJRvnrwLpa1/o+AjdYKDs1g=",
     "lastModified": 1791312500
+  },
+  "zen-browser": {
+    "type": "github",
+    "owner": "youwen5",
+    "repo": "zen-browser-flake",
+    "rev": "458cd16116c362a5e92d5db6bdc3599e4e8b1f4a",
+    "narHash": "sha256-qpJE5ug1T+7LEdXRLI9/ZIwe/rzqjILR9BpMg/sNVtM=",
+    "lastModified": 1791627880
   },
   "zsh-morpho": {
     "type": "github",

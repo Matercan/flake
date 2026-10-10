@@ -1,7 +1,7 @@
-{ moduleWithSystem, self, ... }:
+{ inputs, moduleWithSystem, ... }:
 {
   flake.nixosModules.hyprlandConfiguration = moduleWithSystem (
-    { pkgs, system, ... }:
+    { pkgs, self', system, ... }:
     {
       networking = {
         hostName = "hyprland-btw";
@@ -9,8 +9,10 @@
       };
 
       environment.systemPackages = with pkgs; [
+        inputs.zen-browser.packages.${system}.default 
         kitty
-      ] ++ (with self.packages.${system}; [
+      ] ++ (with self'.packages; [
+        spicetify 
         hyprland
         nvim 
         nvim-config
@@ -20,12 +22,12 @@
         noto-fonts
         noto-fonts-color-emoji
         noto-fonts-cjk-serif
-        self.packages.${system}.firaCodeIScript
+        self'.packages.firaCodeIScript
       ];
 
       xdg.portal = {
         enable = true;
-        configPackages = [ self.packages.${system}.hyprland ];
+        configPackages = [ self'.packages.hyprland ];
         extraPortals = [
           pkgs.xdg-desktop-portal-gtk
         ];

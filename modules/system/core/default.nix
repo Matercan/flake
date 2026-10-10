@@ -1,5 +1,6 @@
 {
   self,
+  inputs,
   ...
 }:
 {
@@ -36,6 +37,7 @@
           unzip
           curl
           wget
+          inputs.tack.packages.${system}.default
         ]
         ++ (with self.packages.${system}; [
           bat

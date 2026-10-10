@@ -27,7 +27,7 @@ url = "git+https://git.outfoxxed.me/outfoxxed/quickshell"
 url = "gh:hyprwm/Hyprland"
 
 [inputs.tack]
-url = "github:manic-systems/tack"
+url = "gh:manic-systems/tack"
 
 [inputs.telescope-cmdline]
 url = "gh:jonarrien/telescope-cmdline.nvim"
@@ -49,3 +49,9 @@ tag = "v{version}"
 [inputs.firaCodeiScript]
 url = "gh:kencrocken/FiraCodeiScript"
 type = "fetch"
+
+[inputs.zen-browser]
+url = "gh:youwen5/zen-browser-flake"
+
+[inputs.spicetify]
+url = "gh:Gerg-L/spicetify-nix"

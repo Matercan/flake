@@ -15,30 +15,24 @@
       packages.hyprland =
         let
           config = pkgs.writeText "hyprland.lua" /* lua */ ''
-            -- This is an example Hyprland Lua config file.
-            -- Refer to the wiki for more information.
-            -- https://wiki.hypr.land/configuring/
-
-            -- Please note not all available settings / options are set here.
-            -- For a full list, see the wiki
-
-            -- You can (and should!!) split this configuration into multiple files
-            -- Create your files separately and then require them like this:
-            -- require("myColors")
-
-
             ------------------
             ---- MONITORS ----
             ------------------
 
             -- See https://wiki.hypr.land/configuring/core/monitors/
             hl.monitor({
-                output   = "",
+                output   = "eDP-1",
                 mode     = "preferred",
-                position = "auto",
-                scale    = "auto",
+                position = "1920x0",
+                scale    = "1",
             })
 
+            hl.monitor({
+                output   = "HDMI-A-1",
+                mode     = "preferred",
+                position = "0x0",
+                scale    = "auto",
+            })
 
             ---------------------
             ---- MY PROGRAMS ----
@@ -64,7 +58,6 @@
                -- hl.exec_cmd("waybar & hyprpaper & firefox")
             end)
 
-
             -------------------------------
             ---- ENVIRONMENT VARIABLES ----
             -------------------------------
@@ -74,24 +67,19 @@
             hl.env("XCURSOR_SIZE", "24")
             hl.env("HYPRCURSOR_SIZE", "24")
 
-
             -----------------------
             ----- PERMISSIONS -----
             -----------------------
 
-            -- See https://wiki.hypr.land/configuring/core/advanced-configuration/permissions/
-            -- Please note permission changes here require a Hyprland restart and are not applied on-the-fly
-            -- for security reasons
+            hl.config({
+              ecosystem = {
+                enforce_permissions = true,
+              },
+            })
 
-            -- hl.config({
-            --   ecosystem = {
-            --     enforce_permissions = true,
-            --   },
-            -- })
-
-            -- hl.permission("/usr/(bin|local/bin)/grim", "screencopy", "allow")
-            -- hl.permission("/usr/(lib|libexec|lib64)/xdg-desktop-portal-hyprland", "screencopy", "allow")
-            -- hl.permission("/usr/(bin|local/bin)/hyprpm", "plugin", "allow")
+            hl.permission("/usr/(bin|local/bin)/grim", "screencopy", "allow")
+            hl.permission("/usr/(lib|libexec|lib64)/xdg-desktop-portal-hyprland", "screencopy", "allow")
+            hl.permission("/usr/(bin|local/bin)/hyprpm", "plugin", "allow")
 
 
             -----------------------
