@@ -1,6 +1,8 @@
 {
   "$declared": {
+    "firaCodeiScript": "github:kencrocken/FiraCodeiScript",
     "flake-parts": "github:hercules-ci/flake-parts",
+    "flamegraph": "github:brendangregg/Flamegraph",
     "hyprland": "github:hyprwm/Hyprland",
     "import-tree": "github:denful/import-tree",
     "nixpkgs": "github:NixOS/nixpkgs/nixos-unstable",
@@ -8,7 +10,16 @@
     "tack": "github:manic-systems/tack",
     "telescope-cmdline": "github:jonarrien/telescope-cmdline.nvim",
     "telescope-fzf": "github:nvim-telescope/telescope-fzf-native.nvim",
-    "wrappers": "github:Lassulus/wrappers"
+    "wrappers": "github:Lassulus/wrappers",
+    "zsh-morpho": "github:zdharma-continuum/zsh-morpho"
+  },
+  "firaCodeiScript": {
+    "type": "github",
+    "owner": "kencrocken",
+    "repo": "FiraCodeiScript",
+    "rev": "f87318c072f1d9c7d075b1f702c3e4dd4df76a15",
+    "narHash": "sha256-tl3VmqagiQSlkYeNWOt+rTRHHuSBEGiIh/+KpRj1h3g=",
+    "lastModified": 1506234634
   },
   "flake-parts": {
     "type": "github",
@@ -17,6 +28,16 @@
     "rev": "024633cd702b10285db5cb19b40ad48d2399ba60",
     "narHash": "sha256-zTwuwezD0w3hpga6a6P8emidzAZFyWqlNeRBlpWOOl8=",
     "lastModified": 1790898470
+  },
+  "flamegraph": {
+    "type": "github",
+    "owner": "brendangregg",
+    "repo": "Flamegraph",
+    "rev": "a8d807a11c0f22871134324bda709618ca482b58",
+    "narHash": "sha256-FGgiwLD0EK5/P6kyXjH2K9WLQgJhFrGLJ7xdiKcciN0=",
+    "lastModified": 1503090338,
+    "tag": "v1.0",
+    "version": "1.0"
   },
   "hyprland": {
     "type": "github",
@@ -81,5 +102,13 @@
     "rev": "d814b84aa832bb01630439c6b3566652da83a786",
     "narHash": "sha256-Wr358xHHD0XHNzl2V6bzHJRvnrwLpa1/o+AjdYKDs1g=",
     "lastModified": 1791312500
+  },
+  "zsh-morpho": {
+    "type": "github",
+    "owner": "zdharma-continuum",
+    "repo": "zsh-morpho",
+    "rev": "410c9b41bf1b9ef51c87b62ec5f50655a0ec1eb4",
+    "narHash": "sha256-/x4BT8AHwz25ttRNAVgqs1NVCe8ajVJe3efjUZzS080=",
+    "lastModified": 1681620171
   }
 }

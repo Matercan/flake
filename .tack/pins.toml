@@ -43,8 +43,8 @@ type = "fetch"
 
 [inputs.flamegraph]
 url = "gh:brendangregg/Flamegraph"
-type = "fixed"
-tag = "v1.0"
+type = "fetch"
+tag = "v{version}"
 
 [inputs.firaCodeiScript]
 url = "gh:kencrocken/FiraCodeiScript"
