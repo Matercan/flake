@@ -29,7 +29,7 @@
 
           settings = {
             shellAliases = {
-              ls = "${lib.getExe pkgs.eza}";
+              ls = "${lib.getExe pkgs.eza} --icons";
               v = "${lib.getExe self'.packages.nvim}";
               cat = "${lib.getExe self'.packages.bat}";
               update = "${lib.getExe self'.packages.nh}";
@@ -90,7 +90,7 @@
 
             # Morpho ♡
             source ${zsh-morpho}/zsh-morpho.plugin.zsh
-            zstyle ":morpho" screen-saver "${pkgs.asciiquarium-transparent}/bin/asciiquarium"
+            zstyle ":morpho" screen-saver "${lib.getExe pkgs.asciiquarium-transparent}"
             zstyle ":morpho" arguments "-t"
             zstyle ":morpho" delay "290"
             zstyle ":morpho" check-interval "60"

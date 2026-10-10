@@ -5,6 +5,7 @@
     "flamegraph": "github:brendangregg/Flamegraph",
     "hyprland": "github:hyprwm/Hyprland",
     "import-tree": "github:denful/import-tree",
+    "nixcord": "github:4evy/nixcord",
     "nixpkgs": "github:NixOS/nixpkgs/nixos-unstable",
     "quickshell": "git+https://git.outfoxxed.me/outfoxxed/quickshell",
     "spicetify": "github:Gerg-L/spicetify-nix",
@@ -56,6 +57,14 @@
     "rev": "eb1b52eaecc57f7c136d07ae8a93e724dfecac46",
     "narHash": "sha256-ljEMTXP/rH0tOvDzc9gzwww6KcHRPRnEHzd9lK48V7s=",
     "lastModified": 1788467110
+  },
+  "nixcord": {
+    "type": "github",
+    "owner": "4evy",
+    "repo": "nixcord",
+    "rev": "1ffd9a241a518fab5c2188749a599a8981cd8208",
+    "narHash": "sha256-qvL6V4VxqeF5hhrqCYW/XildRFpDJKsevALZRIyGJ7A=",
+    "lastModified": 1791624273
   },
   "nixpkgs": {
     "type": "github",

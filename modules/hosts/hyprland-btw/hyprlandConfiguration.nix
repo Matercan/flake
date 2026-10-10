@@ -1,7 +1,7 @@
 { inputs, moduleWithSystem, ... }:
 {
   flake.nixosModules.hyprlandConfiguration = moduleWithSystem (
-    { pkgs, self', system, ... }:
+    { pkgs, lib, self', system, ... }:
     {
       networking = {
         hostName = "hyprland-btw";
@@ -40,7 +40,51 @@
         ];
       };
 
-      imports = [ ./_hardware-configuration.nix ];
+      programs.nixcord = {
+        enable = true;
+        user = "lili";
+        discord.equicord.enable = true; 
+
+        config.plugins = 
+          let
+            basicPlugins = [
+              "webRichPresence" "betterFolders" 
+              "betterGifPicker" "betterRoleDot"
+              "crashHandler" "customRPC" 
+              "dontRoundMyTimeStamps" "fakeNitro" 
+              "fixImagesQuality" "fixYoutubeEmbeds" 
+              "gifPaste" "PetPet" "youtubeADblock" 
+              "betterActivities" "gifMaker" 
+              "noNitroUpsell" "cancelFriendRequest"
+              "richPresence" "rPCEditor"
+              "splitLargeMessages"
+            ];
+
+            enabledPlugins = lib.genAttrs basicPlugins (name: { enable = true; });
+
+            customPlugins = {
+              musicRichPresence = {
+                enable = true;
+                scrobblerBackend = "lastfm";
+                shareUsername = false;
+                clickableLinks = true;
+                hideWithSpotify = true;
+                hideWithActivity = false;
+                statusName = "{album} | {title}";
+                statusDisplayType = "artist";
+                nameFormat = "artist-first";
+                useListeningStatus = false;
+                missingArt = "logo";
+                showAlbumCover = true;
+                username = "Matercan";
+                showLastFmLogo = true;
+                showLogo = true;
+              };
+            };
+          in
+            enabledPlugins // customPlugins;
+      };
+      imports = [ ./_hardware-configuration.nix inputs.nixcord.nixosModules.nixcord ];
     }
   );
 }

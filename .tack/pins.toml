@@ -55,3 +55,6 @@ url = "gh:youwen5/zen-browser-flake"
 
 [inputs.spicetify]
 url = "gh:Gerg-L/spicetify-nix"
+
+[inputs.nixcord]
+url = "gh:4evy/nixcord"
