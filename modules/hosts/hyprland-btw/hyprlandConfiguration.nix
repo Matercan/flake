@@ -16,6 +16,14 @@
         self'.packages.firaCodeIScript
       ];
 
+      xdg.portal = {
+        enable = true;
+        configPackages = [ self'.packages.hyprland ];
+        extraPortals = [
+          pkgs.xdg-desktop-portal-gtk
+        ];
+      };
+
       imports = [ ./_hardware-configuration.nix ];
     }
   );

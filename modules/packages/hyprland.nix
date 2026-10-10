@@ -8,14 +8,16 @@
       pkgs,
       lib,
       self',
+      system,
+      ...
     }:
     {
       packages.hyprland =
         (inputs.wrappers.wrapperModules.hyprland.apply {
           inherit pkgs;
 
-          config.package = inputs.hyprland.packages.default;
-          options."hypr.conf" = /* lua */ ''
+          package = lib.mkForce inputs.hyprland.packages.${system}.default;
+          "hypr.conf".content = /* lua */ ''
             -- This is an example Hyprland Lua config file.
             -- Refer to the wiki for more information.
             -- https://wiki.hypr.land/configuring/
