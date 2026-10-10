@@ -148,15 +148,29 @@
             term_colors = true,
             compile_path = vim.fn.stdpath("cache") .. "/catppuccin",
             integrations = {
-              cmp = true,
               gitsigns = true,
               treesitter = true,
+              lualine = true,
             },
           }
 
           vim.cmd("colorscheme catppuccin")
 
-          local macchiato = require("catppuccin.palettes").get_palette "macchiato" 
+          local macchiato = require("catppuccin.palettes").get_palette "macchiato"
+
+          vim.api.nvim_set_hl(0, "Pmenu", { bg = "none" })
+          vim.api.nvim_set_hl(0, "PmenuSel", { bg = "none", fg = macchiato.peach }) 
+          vim.api.nvim_set_hl(0, "PmenuSbar", { bg = "none" })
+          vim.api.nvim_set_hl(0, "PmenuThumb", { bg = "none" })
+
+          vim.api.nvim_set_hl(0, "LspReferenceText", { fg = macchiato.caramel, bg = "none" })
+          vim.api.nvim_set_hl(0, "LspReferenceRead", { fg = macchiato.mocha, bg = "none" })
+          vim.api.nvim_set_hl(0, "LspReferenceWrite", { fg = macchiato.milk, bg = "none" })
+          vim.api.nvim_set_hl(0, "LspReferenceTarget", { fg = macchiato.rose, bg = "none" })
+          vim.api.nvim_set_hl(0, "LspInlayHint", { fg = macchiato.ice, bg = "none" })
+          vim.api.nvim_set_hl(0, "LspCodeLens", { fg = macchiato.pearl, bg = "none" })
+          vim.api.nvim_set_hl(0, "LspCodeLensSeparator", { fg = macchiato.pearl, bg = "none" })
+          vim.api.nvim_set_hl(0, "LspSignatureActiveParameter", { fg = macchiato.rose, bg = "none" })
 
           vim.api.nvim_set_hl(0, "TelescopeNormal", { bg = "none" })
           vim.api.nvim_set_hl(0, "TelescopeBorder", { bg = "none", fg = macchiato.blue })
@@ -260,25 +274,27 @@
 
           local orig_open_floating_preview = vim.lsp.util.open_floating_preview
           vim.lsp.util.open_floating_preview = function(contents, syntax, opts, ...)
-            opts = opts or {}
-            opts.border = opts.border or "single" -- or "rounded"
-            return orig_open_floating_preview(contents, syntax, opts, ...)
+              opts = opts or {}
+              opts.border = opts.border or "single" -- or "rounded"
+              return orig_open_floating_preview(contents, syntax, opts, ...)
           end
 
+          -- Function to set popup border
           local function set_popup_border(winid)
-            if winid and winid >= 0 and vim.api.nvim_win_is_valid(winid) then
-              pcall(vim.api.nvim_win_set_config, winid, { border = "single" })
-            end
+              if winid and winid >= 0 and vim.api.nvim_win_is_valid(winid) then
+                  pcall(vim.api.nvim_win_set_config, winid, { border = "single" })
+              end
           end
 
+          -- Create autocmd for setting popup borders
           vim.api.nvim_create_autocmd("CompleteChanged", {
-            group = vim.api.nvim_create_augroup("CompletionPopupBorder", { clear = true }),
-            callback = function()
-              vim.schedule(function()
-                local info = vim.fn.complete_info({ "selected" })
-                set_popup_border(info.preview_winid)
-              end)
-            end,
+              group = vim.api.nvim_create_augroup("CompletionPopupBorder", { clear = true }),
+              callback = function()
+                  vim.schedule(function()
+                      local info = vim.fn.complete_info({ "selected" })
+                      set_popup_border(info.preview_winid)
+                  end)
+              end,
           })
 
           local orig = vim.api.nvim__complete_set
@@ -345,10 +361,13 @@
         '';
       };
 
-      nvim-web-devicons = {
-        name = "devicons";
-        package = pkgs.vimPlugins.nvim-web-devicons;
-        config = /* lua */ ''require('nvim-web-devicons').setup()'';
+      lualine = {
+        name = "lualine";
+        package = pkgs.vimPlugins.lualine-nvim;
+        dependencies = [ pkgs.vimPlugins.nvim-web-devicons ];
+        config = /* lua */ ''
+          require('lualine').setup()
+        '';
       };
 
       gitsigns = {
@@ -369,9 +388,9 @@
         catppuccin
 
         gitsigns
-        nvim-web-devicons
 
         lspconfig
+        lualine
         
         oil
         telescope

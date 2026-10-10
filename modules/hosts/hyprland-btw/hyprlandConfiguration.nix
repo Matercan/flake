@@ -1,7 +1,7 @@
-{ inputs, moduleWithSystem, ... }:
+{ inputs, lib, moduleWithSystem, ... }:
 {
   flake.nixosModules.hyprlandConfiguration = moduleWithSystem (
-    { pkgs, lib, self', system, ... }:
+    { pkgs,  self', system, ... }:
     {
       networking = {
         hostName = "hyprland-btw";
@@ -43,20 +43,21 @@
       programs.nixcord = {
         enable = true;
         user = "lili";
-        discord.equicord.enable = true; 
+        equibop.enable = true; 
+	discord.equicord.enable = true;
 
         config.plugins = 
           let
             basicPlugins = [
               "webRichPresence" "betterFolders" 
               "betterGifPicker" "betterRoleDot"
-              "crashHandler" "customRPC" 
-              "dontRoundMyTimeStamps" "fakeNitro" 
+              "crashHandler" "customRpc" 
+              "dontRoundMyTimestamps" "fakeNitro" 
               "fixImagesQuality" "fixYoutubeEmbeds" 
-              "gifPaste" "PetPet" "youtubeADblock" 
+              "gifPaste" "petpet" "youtubeAdblock" 
               "betterActivities" "gifMaker" 
               "noNitroUpsell" "cancelFriendRequest"
-              "richPresence" "rPCEditor"
+              "richPresence" "rpcEditor"
               "splitLargeMessages"
             ];
 
@@ -77,12 +78,11 @@
                 missingArt = "logo";
                 showAlbumCover = true;
                 username = "Matercan";
-                showLastFmLogo = true;
                 showLogo = true;
               };
             };
           in
-            enabledPlugins // customPlugins;
+        enabledPlugins // customPlugins;
       };
       imports = [ ./_hardware-configuration.nix inputs.nixcord.nixosModules.nixcord ];
     }
