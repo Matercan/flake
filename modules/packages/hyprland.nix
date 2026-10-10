@@ -13,11 +13,8 @@
     }:
     {
       packages.hyprland =
-        (inputs.wrappers.wrapperModules.hyprland.apply {
-          inherit pkgs;
-
-          package = lib.mkForce inputs.hyprland.packages.${system}.default;
-          "hypr.conf".content = /* lua */ ''
+        let
+          config = pkgs.writeText "hyprland.lua" /* lua */ ''
             -- This is an example Hyprland Lua config file.
             -- Refer to the wiki for more information.
             -- https://wiki.hypr.land/configuring/
@@ -52,7 +49,6 @@
             local fileManager = "dolphin"
             local menu        = "hyprlauncher"
 
-
             -------------------
             ---- AUTOSTART ----
             -------------------
@@ -62,11 +58,11 @@
             -- Autostart necessary processes (like notifications daemons, status bars, etc.)
             -- Or execute your favorite apps at launch like this:
             --
-            -- hl.on("hyprland.start", function () 
-            --   hl.exec_cmd(terminal)
-            --   hl.exec_cmd("nm-applet")
-            --   hl.exec_cmd("waybar & hyprpaper & firefox")
-            -- end)
+            hl.on("hyprland.start", function () 
+               hl.exec_cmd(terminal)
+               -- hl.exec_cmd("nm-applet")
+               -- hl.exec_cmd("waybar & hyprpaper & firefox")
+            end)
 
 
             -------------------------------
@@ -374,7 +370,13 @@
                 float = true,
             })
           '';
-
-        }).wrapper;
+        in
+        inputs.wrappers.lib.wrapPackage {
+          inherit pkgs;
+          package = inputs.hyprland.packages.${system}.default;
+          flags = {
+            "--config" = config;
+          };
+        };
     };
 }

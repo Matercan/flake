@@ -25,6 +25,8 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernel.sysctl."vm.unprivileged_userfaultfd" = 1;
 
+  hardware.firmware = [ pkgs.linux-firmware ];
+
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/8efff9a8-758d-4980-961f-4fada61b057b";
     fsType = "ext4";
@@ -39,6 +41,8 @@
     ];
   };
   boot.loader.efi.efiSysMountPoint = "/boot";
+  bluetooth.enable = true;
+  services.blueman.enable = true;
 
   swapDevices = [
     { device = "/dev/disk/by-uuid/652c383c-85c8-4378-8ead-b7a3bde23e04"; }

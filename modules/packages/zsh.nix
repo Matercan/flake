@@ -90,7 +90,7 @@
 
             # Morpho ♡
             source ${zsh-morpho}/zsh-morpho.plugin.zsh
-            zstyle ":morpho" screen-saver "${pkgs.asciiquarium-transparent}/bin/asciiquarium-transparent"
+            zstyle ":morpho" screen-saver "${pkgs.asciiquarium-transparent}/bin/asciiquarium"
             zstyle ":morpho" arguments "-t"
             zstyle ":morpho" delay "290"
             zstyle ":morpho" check-interval "60"
