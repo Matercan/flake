@@ -1,15 +1,33 @@
 { inputs, ... }:
 {
   perSystem = { pkgs, ... }: {
-    packages.firaCodeIScript = pkgs.stdenv.mkDerivation {
-      pname = "firaCodeIScript";
-      version = "1.0.0";
+    packages.firaCode = pkgs.stdenv.mkDerivation {
+      pname = "firaCode";
+      version = "6.2";
 
-      src = inputs.firaCodeiScript;
+      src = inputs.firaCode;
 
       installPhase = ''
         runHook preInstall
-        install -Dm644 ${inputs.firaCodeiScript}/*.ttf -t $out/share/fonts/truetype
+        install -Dm644 ${inputs.firaCode}/*.ttf -t $out/share/fonts/truetype
+        runHook postInstall
+      '';
+    };
+
+    packages.script12 = pkgs.stdenv.mkDerivation {
+      pname = "script12";
+      version = "6.2";
+
+      src = ../../assets/script12.zip;
+
+      unpackPhase = ''
+        runHook preUnpack
+        ${pkgs.unzip}/bin/unzip $src
+      '';
+
+      installPhase = ''
+        runHook preInstall
+        install -Dm644 *.ttf -t $out/share/fonts/truetype
         runHook postInstall
       '';
     };

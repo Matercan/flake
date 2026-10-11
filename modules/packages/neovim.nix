@@ -158,6 +158,7 @@
 
           local macchiato = require("catppuccin.palettes").get_palette "macchiato"
 
+
           vim.api.nvim_set_hl(0, "Pmenu", { bg = "none" })
           vim.api.nvim_set_hl(0, "PmenuSel", { bg = "none", fg = macchiato.peach }) 
           vim.api.nvim_set_hl(0, "PmenuSbar", { bg = "none" })
@@ -194,6 +195,17 @@
 
           vim.api.nvim_set_hl(0, "CursorLineNr", { fg = macchiato.peach, bold = true, })
           vim.api.nvim_set_hl(0, "Cursor", { fg = macchiato.lavender, })
+
+          -- Treesitter highlight groups (The modern way!) ♡
+          vim.api.nvim_set_hl(0, "@comment", { italic = true })
+          vim.api.nvim_set_hl(0, "@keyword", { italic = true })
+          vim.api.nvim_set_hl(0, "@variable.parameter", { italic = true })
+          vim.api.nvim_set_hl(0, "@parameter", { italic = true })
+          
+          -- Legacy syntax groups (Just to be absolutely safe~) ♡
+          vim.api.nvim_set_hl(0, "Comment", { italic = true })
+          vim.api.nvim_set_hl(0, "Keyword", { italic = true })
+
         '';
       };
 
@@ -235,7 +247,7 @@
                   history = "",
                   command = "",
                   number = "󰉻",
-                  unknown = "",
+                  unknown = "让我真想自",
                 },
                 prompt_prefix = ""
               },

@@ -34,7 +34,6 @@
         with pkgs;
         [
           vim
-          unzip
           curl
           wget
           inputs.tack.packages.${system}.default

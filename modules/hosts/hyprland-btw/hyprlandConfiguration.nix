@@ -15,21 +15,22 @@
         pulse.enable = true;
       };
 
-      environment.systemPackages = with pkgs; [
+      environment.systemPackages = [
         inputs.zen-browser.packages.${system}.default 
-        kitty
       ] ++ (with self'.packages; [
         spicetify 
         hyprland
         nvim 
         nvim-config
+        kitty
       ]);
 
       fonts.packages = with pkgs; [
         noto-fonts
         noto-fonts-color-emoji
         noto-fonts-cjk-serif
-        self'.packages.firaCodeIScript
+        self'.packages.firaCode
+        self'.packages.script12
       ];
 
       xdg.portal = {
@@ -44,7 +45,7 @@
         enable = true;
         user = "lili";
         equibop.enable = true; 
-	discord.equicord.enable = true;
+        discord.equicord.enable = true;
 
         config.plugins = 
           let

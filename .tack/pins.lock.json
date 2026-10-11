@@ -1,6 +1,6 @@
 {
   "$declared": {
-    "firaCodeiScript": "github:kencrocken/FiraCodeiScript",
+    "firaCode": "github:tonsky/FiraCode",
     "flake-parts": "github:hercules-ci/flake-parts",
     "flamegraph": "github:brendangregg/Flamegraph",
     "hyprland": "github:hyprwm/Hyprland",
@@ -16,13 +16,13 @@
     "zen-browser": "github:youwen5/zen-browser-flake",
     "zsh-morpho": "github:zdharma-continuum/zsh-morpho"
   },
-  "firaCodeiScript": {
+  "firaCode": {
     "type": "github",
-    "owner": "kencrocken",
-    "repo": "FiraCodeiScript",
-    "rev": "f87318c072f1d9c7d075b1f702c3e4dd4df76a15",
-    "narHash": "sha256-tl3VmqagiQSlkYeNWOt+rTRHHuSBEGiIh/+KpRj1h3g=",
-    "lastModified": 1506234634
+    "owner": "tonsky",
+    "repo": "FiraCode",
+    "rev": "ecd367b040ad92a28b64fa93135775f7e2417b37",
+    "narHash": "sha256-jjV+63PCxCxzMjur2x/MVOfNUMJEFnG+8Zl6NSri1VA=",
+    "lastModified": 1785258133
   },
   "flake-parts": {
     "type": "github",
