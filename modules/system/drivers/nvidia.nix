@@ -14,7 +14,9 @@
 
       nixpkgs.config.allowUnfree = true;
 
-      services.xserver.videoDrivers = [ "nvidia" ];
+      services.xserver.videoDrivers = [ "nvidia" "amdgpu" ];
+
+      boot.kernelParams = [ "nvidia-drm.modset=1" ];
 
       hardware.nvidia = {
         modesetting.enable = true;

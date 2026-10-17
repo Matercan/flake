@@ -29,7 +29,7 @@
 
           settings = {
             shellAliases = {
-              ls = "${lib.getExe pkgs.eza} --icons";
+              ls = "${lib.getExe pkgs.eza} --icons always";
               v = "${lib.getExe self'.packages.nvim}";
               cat = "${lib.getExe self'.packages.bat}";
               update = "${lib.getExe self'.packages.nh}";

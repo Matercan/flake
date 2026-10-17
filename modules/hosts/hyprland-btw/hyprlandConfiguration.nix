@@ -1,7 +1,7 @@
 { inputs, lib, moduleWithSystem, ... }:
 {
   flake.nixosModules.hyprlandConfiguration = moduleWithSystem (
-    { pkgs,  self', system, ... }:
+    { pkgs, self', system, ... }:
     {
       networking = {
         hostName = "hyprland-btw";
@@ -15,8 +15,15 @@
         pulse.enable = true;
       };
 
-      environment.systemPackages = [
+      environment.systemPackages = with pkgs; [
         inputs.zen-browser.packages.${system}.default 
+        inputs.hyprland.packages.${system}.default
+        proton-vpn
+        prismlauncher
+        vicinae
+        wl-clipboard
+        grim
+        slurp
       ] ++ (with self'.packages; [
         spicetify 
         hyprland
@@ -29,13 +36,13 @@
         noto-fonts
         noto-fonts-color-emoji
         noto-fonts-cjk-serif
-        self'.packages.firaCode
+        fira-code
         self'.packages.script12
       ];
 
       xdg.portal = {
         enable = true;
-        configPackages = [ self'.packages.hyprland ];
+        configPackages = [ inputs.hyprland.packages.${system}.default ];
         extraPortals = [
           pkgs.xdg-desktop-portal-gtk
         ];
@@ -85,6 +92,12 @@
           in
         enabledPlugins // customPlugins;
       };
+
+      programs.steam = {
+        enable = true;
+        gamescopeSession.enable = true;
+      };
+
       imports = [ ./_hardware-configuration.nix inputs.nixcord.nixosModules.nixcord ];
     }
   );

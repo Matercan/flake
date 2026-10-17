@@ -11,100 +11,79 @@
       ...
     }:
     let
-      importPlugins =
-        plugins:
+    importPlugins = plugins: let
+      # Helper to convert a Nix list of strings to a Lua list
+      toLuaList = list: 
+        if list == [] then "{}" 
+        else "{ " + (lib.concatMapStringsSep ", " (x: "\"${x}\"") list) + " }";
+
+      # Sort plugins by priority (higher priority loads first in lazy.nvim)
+      sortedPlugins = lib.lists.sort (p: q: (p.priority or 0) > (q.priority or 0)) plugins;
+
+      # Build the lazy.nvim spec table
+      lazySpec = lib.concatMapStringsSep ",\n" (
+        { name, package, dependencies ? [], config ? "", lazy ? true, ft ? null, cmd ? null, priority ? 0, ... }:
         let
-          toLuaList =
-            list:
-            if list == [ ] then "{}" else "{ " + (lib.concatMapStringsSep ", " (x: "\"${x}\"") list) + " }";
+          pkgPath = package.outPath or package;
+          
+          # Convert Nix package dependencies into lazy.nvim spec tables
+          depSpecs = map (dep: 
+            let 
+              depPath = dep.outPath or dep;
+              # Fallback to basename if pname is not available
+              depName = dep.pname or (builtins.baseNameOf depPath);
+            in "{ dir = \"${depPath}\", name = \"${depName}\" }"
+          ) dependencies;
 
-          # build a Lua table of all plugin definitions
-          pluginTable = lib.concatMapStringsSep ",\n" (
-            {
-              name,
-              package,
-              dependencies ? [ ],
-              config ? "",
-              lazy ? false,
-              ft ? null,
-              cmd ? null,
-              ...
-            }:
-            let
-              pkgPath = package.outPath or package;
-              depPaths = map (dep: dep.outPath or dep) dependencies;
-              luaConfig =
-                if config != "" then
-                  "function()\n  " + (lib.replaceStrings [ "\n" ] [ "\n  " ] (lib.trim config)) + "\nend"
-                else
-                  "nil";
-            in
-            ''
-              {
-                name = "${name}",
-                path = "${pkgPath}",
-                dependencies = ${toLuaList depPaths},
-                config = ${luaConfig},
-                lazy = ${if lazy then "true" else "false"},
-                ft = ${if ft != null then "\"${ft}\"" else "nil"},
-                cmd = ${if cmd != null then "\"${cmd}\"" else "nil"}
-              }
-            ''
-          ) (lib.lists.sort (p: q: p.priority or 0 < q.priority or 0) plugins);
-
-          # the Lua loader script that processes the table safely
-          luaLoader = /* lua */ ''
-            local plugins = {
-              ${pluginTable}
-            }
-
-            local function add_to_rtp(path)
-              if path and path ~= "" then
-                local rtp = vim.opt.runtimepath:get()
-                if not vim.list_contains(rtp, path) then
-                  vim.opt.runtimepath:append(path) 
-                end
-              end
-            end
-
-            for _, plugin in ipairs(plugins) do
-              for _, dep_path in ipairs(plugin.dependencies) do
-                add_to_rtp(dep_path)
-              end
-              
-              add_to_rtp(plugin.path)
-
-              if not plugin.lazy then
-                if plugin.config then
-                  plugin.config()
-                end
-              else
-                if plugin.ft then
-                  vim.api.nvim_create_autocmd("FileType", {
-                    pattern = plugin.ft,
-                    callback = function()
-                      if plugin.config then plugin.config() end
-                    end
-                  })
-                elseif plugin.cmd then
-                  vim.api.nvim_create_autocmd("CmdUndefined", {
-                    pattern = plugin.cmd,
-                    callback = function()
-                      if plugin.config then plugin.config() end
-                    end
-                  })
-                else
-                  vim.api.nvim_create_autocmd("VimEnter", {
-                    callback = function()
-                      if plugin.config then plugin.config() end
-                    end
-                  })
-                end
-              end
-            end
-          '';
+          luaConfig = if config != "" then 
+            "function()\n  " + (lib.replaceStrings ["\n"] ["\n  "] (lib.trim config)) + "\nend" 
+          else 
+            "nil";
+          
+          specFields = [
+            "dir = \"${pkgPath}\""
+            "name = \"${name}\""
+          ] ++ (if depSpecs != [] then [ ("dependencies = { " + (lib.concatStringsSep ", " depSpecs) + " }")  ] else [])
+          ++ [ "lazy = ${if lazy then "true" else "false"}" ]
+          ++ (if ft != null then [ "ft = ${toLuaList (lib.splitString "," ft)}" ] else [])
+          ++ (if cmd != null then [ "cmd = ${toLuaList (lib.splitString "," cmd)}" ] else [])
+          ++ [ "priority = ${toString priority}" ]
+          ++ (if config != "" then [ "config = ${luaConfig}" ] else []);
+          
         in
-        luaLoader;
+        "{\n  " + (lib.concatStringsSep ",\n  " specFields) + "\n}"
+      ) sortedPlugins;
+
+      # The Lua loader script that bootstraps and configures lazy.nvim
+      luaLoader = ''
+        -- 1. Bootstrap lazy.nvim if it's not already installed
+        local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+        if not (vim.uv or vim.loop).fs_stat(lazypath) then
+          vim.fn.system({
+            "git",
+            "clone",
+            "--filter=blob:none",
+            "https://github.com/folke/lazy.nvim.git",
+            "--branch=stable",
+            lazypath,
+          })
+        end
+        vim.opt.rtp:prepend(lazypath)
+
+        -- 2. Setup lazy.nvim with our generated spec
+        require("lazy").setup({
+          ${lazySpec}
+        }, {
+          -- ⚠️ CRITICAL FOR NIX: Disable update checking and change detection
+          -- because the /nix/store is read-only and Nix manages the versions.
+          checker = { enabled = false },
+          change_detection = { enabled = false },
+          
+          -- Prevent lazy from trying to auto-install missing plugins
+          install = { missing = false, colorscheme = { "catppuccin" } },
+        })
+      '';
+    in luaLoader;
 
       cmdline-from-source = pkgs.vimUtils.buildVimPlugin {
         name = "telescope-cmdline-nvim";
@@ -196,16 +175,26 @@
           vim.api.nvim_set_hl(0, "CursorLineNr", { fg = macchiato.peach, bold = true, })
           vim.api.nvim_set_hl(0, "Cursor", { fg = macchiato.lavender, })
 
-          -- Treesitter highlight groups (The modern way!) ♡
-          vim.api.nvim_set_hl(0, "@comment", { italic = true })
-          vim.api.nvim_set_hl(0, "@keyword", { italic = true })
-          vim.api.nvim_set_hl(0, "@variable.parameter", { italic = true })
-          vim.api.nvim_set_hl(0, "@parameter", { italic = true })
-          
-          -- Legacy syntax groups (Just to be absolutely safe~) ♡
-          vim.api.nvim_set_hl(0, "Comment", { italic = true })
-          vim.api.nvim_set_hl(0, "Keyword", { italic = true })
+          -- Syntax Highlight groups ♡
+          vim.api.nvim_set_hl(0, "Comment", { fg = macchiato.teal, italic = true, bold = true })
+          vim.api.nvim_set_hl(0, "@comment", { fg = macchiato.teal,  italic = true })
 
+          local keyword_table = { fg = macchiato.mauve, italic = true, bold = true }
+          local parameter_table = { fg = macchiato.red, italic = true, bold = true }
+
+          vim.api.nvim_set_hl(0, "@keyword", keyword_table)
+          vim.api.nvim_set_hl(0, "Keyword", keyword_table)
+          vim.api.nvim_set_hl(0, "Statement", keyword_table)
+          vim.api.nvim_set_hl(0, "cStatement", keyword_table)
+          vim.api.nvim_set_hl(0, "Conditional", keyword_table)
+          vim.api.nvim_set_hl(0, "cConditional", keyword_table)
+          vim.api.nvim_set_hl(0, "Repeat", keyword_table)
+          vim.api.nvim_set_hl(0, "cRepeat", keyword_table)
+
+          vim.api.nvim_set_hl(0, "@variable.parameter", parameter_table)
+          vim.api.nvim_set_hl(0, "@parameter", parameter_table)
+          vim.api.nvim_set_hl(0, "@lsp.type.parameter", parameter_table)
+          vim.api.nvim_set_hl(0, "@lsp.typemod.parameter.declaration", parameter_table) 
         '';
       };
 
@@ -247,7 +236,7 @@
                   history = "",
                   command = "",
                   number = "󰉻",
-                  unknown = "让我真想自",
+                  unknown = "",
                 },
                 prompt_prefix = ""
               },
@@ -281,60 +270,24 @@
       lspconfig = {
         name = "nvim-lspconfig";
         package = pkgs.vimPlugins.nvim-lspconfig;
+        lazy = false;
         config = /* lua */ ''
-          vim.opt.completeopt = { "menu", "menuone", "noselect", "popup" }
-
           local orig_open_floating_preview = vim.lsp.util.open_floating_preview
           vim.lsp.util.open_floating_preview = function(contents, syntax, opts, ...)
               opts = opts or {}
-              opts.border = opts.border or "single" -- or "rounded"
+              opts.border = opts.border or "single"
               return orig_open_floating_preview(contents, syntax, opts, ...)
           end
-
-          -- Function to set popup border
-          local function set_popup_border(winid)
-              if winid and winid >= 0 and vim.api.nvim_win_is_valid(winid) then
-                  pcall(vim.api.nvim_win_set_config, winid, { border = "single" })
-              end
-          end
-
-          -- Create autocmd for setting popup borders
-          vim.api.nvim_create_autocmd("CompleteChanged", {
-              group = vim.api.nvim_create_augroup("CompletionPopupBorder", { clear = true }),
-              callback = function()
-                  vim.schedule(function()
-                      local info = vim.fn.complete_info({ "selected" })
-                      set_popup_border(info.preview_winid)
-                  end)
-              end,
-          })
-
-          local orig = vim.api.nvim__complete_set
-          vim.api.nvim__complete_set = function(index, opts)
-            local windata = orig(index, opts)
-            set_popup_border(windata and windata.winid)
-            return windata
-          end
-
+          
           vim.api.nvim_create_autocmd("LspAttach", {
             group = vim.api.nvim_create_augroup("UserLspConfig", {}),
             callback = function(ev)
               local client = vim.lsp.get_client_by_id(ev.data.client_id)
               local bufnr = ev.buf
-
-              if client:supports_method("textDocument/completion") then
-                vim.lsp.completion.enable(true, client.id, bufnr, {
-                  autotrigger = true, 
-                })
-              end
-
-              vim.keymap.set("i", "<C-Space>", function()
-                vim.lsp.completion.get()
-              end, { buffer = bufnr, desc = "Trigger LSP Completion" })
-
+          
               vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
               local opts = { buffer = bufnr, silent = true, desc = "LSP Action" }
-
+          
               if client:supports_method("textDocument/hover") then
                 vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
               end
@@ -355,13 +308,15 @@
               end
             end,
           })
-
+          
+          local capabilities = require('cmp_nvim_lsp').default_capabilities()
+          
           vim.lsp.config('*', {
-            capabilities = vim.lsp.protocol.make_client_capabilities(),
+            capabilities = capabilities,
           })
-
-          vim.lsp.enable({ "lua_ls", "nil_ls", "ltex", "clangd", "rust_analyzer" })
-
+          
+          vim.lsp.enable({ "lua_ls", "nil_ls", "ltex", "clangd", "rust_analyzer", "qmlls" })
+          
           vim.diagnostic.config({
             virtual_text = true,
             underline = true,
@@ -369,7 +324,79 @@
             severity_sort = true,
             float = { border = "single", source = "always" },
           })
+        '';
+      };
 
+      nvim-cmp = {
+        package = pkgs.vimPlugins.nvim-cmp;
+        name = "nvim-cmp";
+        lazy = false;
+        dependencies = [
+          pkgs.vimPlugins.nvim-web-devicons
+          pkgs.vimPlugins.cmp-nvim-lsp
+          pkgs.vimPlugins.cmp_luasnip
+          pkgs.vimPlugins.friendly-snippets
+          pkgs.vimPlugins.luasnip
+          pkgs.vimPlugins.cmp-buffer
+        ]; 
+        config = /* lua */ ''
+          local cmp = require('cmp')
+          local luasnip = require('luasnip')
+
+          require('luasnip.loaders.from_vscode').lazy_load()
+
+          cmp.setup({
+            snippet = {
+              expand = function(args)
+                luasnip.lsp_expand(args.body)
+              end,
+            },
+            window = {
+              completion = cmp.config.window.bordered(),
+              documentation = cmp.config.window.bordered(),
+            },
+            mapping = cmp.mapping.preset.insert({
+              ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+              ['<C-f>'] = cmp.mapping.scroll_docs(4),
+              ['<C-Space>'] = cmp.mapping.complete(),
+              ['<C-e>'] = cmp.mapping.abort(),
+              ['<CR>'] = cmp.mapping.confirm({ select = true }),
+            }),
+             sources = cmp.config.sources({
+              { name = 'nvim_lsp' },
+              { name = 'luasnip' },
+            }, {
+              { name = 'buffer' },
+            }),
+
+            formatting = {
+              fields = { "abbr", "kind", "menu" },
+              format = function(entry, vim_item)
+                local lsp_kind_icons = {
+                  Text = "󰉿", Method = "󰆧", Function = "󰊕", Constructor = "",
+                  Field = "󰇽", Variable = "󰂡", Class = "󰠱", Interface = "",
+                  Module = "󰏗", Property = "󰜢", Unit = "󰑭", Value = "󰎠",
+                  Enum = "", Keyword = "󰌋", Snippet = "󰘍", Color = "󰏘",
+                  File = "󰈙", Reference = "󰈇", Folder = "󰉋", EnumMember = "",
+                  Constant = "󰏿", Struct = "󰙅", Event = "", Operator = "󰆕",
+                  TypeParameter = "󰊄",
+                }
+                
+                local has_devicons, devicons = pcall(require, "nvim-web-devicons")
+                local kind_icons = has_devicons and devicons.get_icons() or {}
+                
+                vim_item.kind = (kind_icons[vim_item.kind] or lsp_kind_icons[vim_item.kind] or "?") .. " "
+                vim_item.menu = ({
+                  nvim_lsp = "[LSP]",
+                  luasnip = "[Snippet]",
+                  buffer = "[Buffer]",
+                  path = "[Path]",
+                })[entry.source.name]
+
+                return vim_item
+              end,
+            },
+          })
         '';
       };
 
@@ -388,6 +415,11 @@
         config = /* lua */ ''require('gitsigns').setup()'';
       };
 
+      wakatime = {
+        name = "wakatime";
+        package = pkgs.vimPlugins.vim-wakatime;
+      };
+
       oil = {
         name = "oil";
         package = pkgs.vimPlugins.oil-nvim;
@@ -402,8 +434,10 @@
         gitsigns
 
         lspconfig
-        lualine
+        nvim-cmp
         
+        lualine
+        wakatime
         oil
         telescope
       ];
@@ -459,6 +493,7 @@
           nil
           ltex-ls
           clang-tools
+          kdePackages.qtdeclarative
           rust-analyzer
           rustc
           cargo

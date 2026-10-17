@@ -58,3 +58,6 @@ url = "gh:4evy/nixcord"
 [inputs.firaCode]
 url = "gh:tonsky/FiraCode"
 type = "fetch"
+
+[inputs.hjem]
+url = "gh:feel-co/hjem"
