@@ -14,6 +14,7 @@
     };
 
     modules = with self.nixosModules; [
+      inputs.hjem.nixosModules.default 
       hyprlandConfiguration
       amdDrivers
       nvidiaDrivers

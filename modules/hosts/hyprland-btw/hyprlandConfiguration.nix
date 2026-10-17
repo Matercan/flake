@@ -1,7 +1,7 @@
 { inputs, lib, moduleWithSystem, ... }:
 {
   flake.nixosModules.hyprlandConfiguration = moduleWithSystem (
-    { pkgs, self', system, ... }:
+    { pkgs, inputs', self', system, ... }:
     {
       networking = {
         hostName = "hyprland-btw";
@@ -15,9 +15,11 @@
         pulse.enable = true;
       };
 
+      programs.xwayland.enable = true;
+
       environment.systemPackages = with pkgs; [
-        inputs.zen-browser.packages.${system}.default 
-        inputs.hyprland.packages.${system}.default
+        inputs'.zen-browser 
+        inputs'.hyprland
         proton-vpn
         prismlauncher
         vicinae
@@ -25,6 +27,7 @@
         grim
         slurp
       ] ++ (with self'.packages; [
+        xcursor-pixel 
         spicetify 
         hyprland
         nvim 
@@ -42,10 +45,15 @@
 
       xdg.portal = {
         enable = true;
-        configPackages = [ inputs.hyprland.packages.${system}.default ];
+        configPackages = [ inputs'.hyprland ];
         extraPortals = [
           pkgs.xdg-desktop-portal-gtk
         ];
+      };
+
+      hjem.users.lili = {
+        enable = true;
+        xdg.config.files."hypr".source = ../../../assets/hypr;
       };
 
       programs.nixcord = {
