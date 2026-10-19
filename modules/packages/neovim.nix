@@ -12,25 +12,20 @@
     }:
     let
     importPlugins = plugins: let
-      # Helper to convert a Nix list of strings to a Lua list
       toLuaList = list: 
         if list == [] then "{}" 
         else "{ " + (lib.concatMapStringsSep ", " (x: "\"${x}\"") list) + " }";
 
-      # Sort plugins by priority (higher priority loads first in lazy.nvim)
       sortedPlugins = lib.lists.sort (p: q: (p.priority or 0) > (q.priority or 0)) plugins;
 
-      # Build the lazy.nvim spec table
       lazySpec = lib.concatMapStringsSep ",\n" (
         { name, package, dependencies ? [], config ? "", lazy ? true, ft ? null, cmd ? null, priority ? 0, ... }:
         let
           pkgPath = package.outPath or package;
           
-          # Convert Nix package dependencies into lazy.nvim spec tables
           depSpecs = map (dep: 
             let 
               depPath = dep.outPath or dep;
-              # Fallback to basename if pname is not available
               depName = dep.pname or (builtins.baseNameOf depPath);
             in "{ dir = \"${depPath}\", name = \"${depName}\" }"
           ) dependencies;
@@ -54,9 +49,7 @@
         "{\n  " + (lib.concatStringsSep ",\n  " specFields) + "\n}"
       ) sortedPlugins;
 
-      # The Lua loader script that bootstraps and configures lazy.nvim
       luaLoader = ''
-        -- 1. Bootstrap lazy.nvim if it's not already installed
         local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
         if not (vim.uv or vim.loop).fs_stat(lazypath) then
           vim.fn.system({
@@ -70,16 +63,12 @@
         end
         vim.opt.rtp:prepend(lazypath)
 
-        -- 2. Setup lazy.nvim with our generated spec
         require("lazy").setup({
           ${lazySpec}
         }, {
-          -- ⚠️ CRITICAL FOR NIX: Disable update checking and change detection
-          -- because the /nix/store is read-only and Nix manages the versions.
           checker = { enabled = false },
           change_detection = { enabled = false },
           
-          -- Prevent lazy from trying to auto-install missing plugins
           install = { missing = false, colorscheme = { "catppuccin" } },
         })
       '';

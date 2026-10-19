@@ -56,6 +56,19 @@
       hjem.users.lili = {
         enable = true;
         xdg.config.files."hypr".source = ../../../assets/hypr;
+        xdg.config.files."fontconfig/config.d".text = ''
+          <?xml version="1.0"?>
+          <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+          <fontconfig>
+            <match t
+            arget="font">
+              <test name="family"><string>Fairfax</string></test>
+              <!-- 100 means monospace, 0 means proportional. We force it to 100! ♡ -->
+              <edit name="spacing" mode="assign"><int>100</int></edit>
+              <edit name="globaladvance" mode="assign"><bool>false</bool></edit>
+            </match>
+          </fontconfig>
+        '';
       };
 
       programs.nixcord = {

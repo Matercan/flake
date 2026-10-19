@@ -4,9 +4,9 @@
       inherit pkgs;
 
       settings = {
-        font_family = "W95FA";
+        font_family = "Fairfax SM";
         
-        font_size = 10;
+        font_size = 12;
         background_opacity = 0.9;
         background = "#363a4f";
         foreground = "#cad3f5";

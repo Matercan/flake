@@ -47,7 +47,7 @@ type = "fetch"
 tag = "v{version}"
 
 [inputs.zen-browser]
-url = "gh:youwen5/zen-browser-flake"
+url = "github:0xc000022070/zen-browser-flake"
 
 [inputs.spicetify]
 url = "gh:Gerg-L/spicetify-nix"
@@ -61,3 +61,7 @@ type = "fetch"
 
 [inputs.hjem]
 url = "gh:feel-co/hjem"
+
+[inputs.fairfax]
+url = "gh:kreativekorp/open-relay"
+type = "fetch"

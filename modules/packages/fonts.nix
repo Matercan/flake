@@ -1,4 +1,4 @@
-{ ... }:
+{ inputs, ... }:
 {
   perSystem = { pkgs, ... }: {
     packages.script12 = pkgs.stdenv.mkDerivation {
@@ -24,17 +24,11 @@
       pname = "script12";
       version = "6.2";
 
-      src = ../../assets/fairfax.zip;
-
-      unpackPhase = ''
-        runHook preUnpack
-        ${pkgs.unzip}/bin/unzip $src
-        runHook postUnpack
-      '';
+      src = inputs.fairfax;
 
       installPhase = ''
         runHook preInstall
-        install -Dm644 *.ttf -t $out/share/fonts/truetype
+        install -Dm644 $src/Fairfax/*.ttf -t $out/share/fonts/truetype
         runHook postInstall
       '';
     };
