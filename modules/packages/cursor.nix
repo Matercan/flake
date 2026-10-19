@@ -9,12 +9,16 @@
 
       unpackPhase = ''
         runHook preUnpack
-        ${pkgs.tar}/bin/tar -xz $src
+        tar -xzf $src
+        runHook postUnpack
       '';
 
       installPhase = ''
         runHook preInstall
-        install -Dm644 pixelfun3 -t $out/share/icons
+
+        mkdir -p $out/share/icons
+        cp -r pixelfun3 $out/share/icons
+
         runHook postInstall
       '';
     };

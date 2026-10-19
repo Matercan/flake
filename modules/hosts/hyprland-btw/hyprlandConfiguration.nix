@@ -18,8 +18,8 @@
       programs.xwayland.enable = true;
 
       environment.systemPackages = with pkgs; [
-        inputs'.zen-browser 
-        inputs'.hyprland
+        inputs'.zen-browser.packages.default
+        inputs'.hyprland.packages.default
         proton-vpn
         prismlauncher
         vicinae
@@ -45,7 +45,7 @@
 
       xdg.portal = {
         enable = true;
-        configPackages = [ inputs'.hyprland ];
+        configPackages = [ inputs'.hyprland.packages.default ];
         extraPortals = [
           pkgs.xdg-desktop-portal-gtk
         ];

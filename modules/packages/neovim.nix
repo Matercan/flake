@@ -353,14 +353,15 @@
             },
             window = {
               completion = {
-                border = 'single',
-                winHighlight = 'Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None',
+                border = 'single', 
+                winhighlight = 'Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None',
               },
               documentation = {
                 border = 'single',
                 winhighlight = 'Normal:NormalFloat,FloatBorder:FloatBorder',
               },
             },
+      
             mapping = cmp.mapping.preset.insert({
               ['<C-b>'] = cmp.mapping.scroll_docs(-4),
               ['<C-f>'] = cmp.mapping.scroll_docs(4),
@@ -428,6 +429,7 @@
 
       oil = {
         name = "oil";
+        lazy = false; 
         package = pkgs.vimPlugins.oil-nvim;
         config = /* lua */ ''require('oil').setup()'';
       };
