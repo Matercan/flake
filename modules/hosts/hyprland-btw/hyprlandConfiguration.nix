@@ -41,6 +41,8 @@
         noto-fonts-cjk-serif
         fira-code
         self'.packages.script12
+        self'.packages.fairfax
+        self'.packages.w95fa
       ];
 
       xdg.portal = {

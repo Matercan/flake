@@ -10,11 +10,31 @@
       unpackPhase = ''
         runHook preUnpack
         ${pkgs.unzip}/bin/unzip $src
+        runHook postUnpack
       '';
 
       installPhase = ''
         runHook preInstall
         install -Dm644 *.TTF -t $out/share/fonts/truetype
+        runHook postInstall
+      '';
+    };
+
+    packages.fairfax = pkgs.stdenv.mkDerivation {
+      pname = "script12";
+      version = "6.2";
+
+      src = ../../assets/fairfax.zip;
+
+      unpackPhase = ''
+        runHook preUnpack
+        ${pkgs.unzip}/bin/unzip $src
+        runHook postUnpack
+      '';
+
+      installPhase = ''
+        runHook preInstall
+        install -Dm644 *.ttf -t $out/share/fonts/truetype
         runHook postInstall
       '';
     };
@@ -33,7 +53,11 @@
 
       installPhase = ''
         runHook preInstall
-        install -Dm644 *.[ot|wof]f -t $out/share/fonts/truetype
+
+        mkdir -p $out/share/fonts/{opentype,woff}
+        install -Dm644 *.otf -t $out/share/fonts/opentype
+        install -Dm644 *.woff *.woff2 -t $out/share/fonts/woff
+
         runHook postInstall
       '';
     };
