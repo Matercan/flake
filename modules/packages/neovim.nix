@@ -110,7 +110,7 @@
         package = pkgs.vimPlugins.catppuccin-nvim;
         config = /* lua */ ''
           require("catppuccin").setup {
-            flavour = "frappe",
+            flavour = "latte",
             background = { light = "latte", dark = "mocha", },
             transparent_background = true,
             term_colors = true,

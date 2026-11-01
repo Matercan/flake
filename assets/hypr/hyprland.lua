@@ -6,6 +6,7 @@ require('look')
 
 hl.on("hyprland.start", function ()
   hl.exec_cmd('kitty')
+  hl.exec_cmd("fcitx5")
   hl.exec_cmd("vicinae server")
 end)
 
