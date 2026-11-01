@@ -110,7 +110,7 @@
         package = pkgs.vimPlugins.catppuccin-nvim;
         config = /* lua */ ''
           require("catppuccin").setup {
-            flavour = "macchiato",
+            flavour = "frappe",
             background = { light = "latte", dark = "mocha", },
             transparent_background = true,
             term_colors = true,
@@ -124,7 +124,7 @@
 
           vim.cmd("colorscheme catppuccin")
 
-          local macchiato = require("catppuccin.palettes").get_palette "macchiato"
+          local macchiato = require("catppuccin.palettes").get_palette "latte"
 
 
           vim.api.nvim_set_hl(0, "Pmenu", { bg = "none" })
@@ -304,7 +304,7 @@
             capabilities = capabilities,
           })
           
-          vim.lsp.enable({ "lua_ls", "nil_ls", "ltex", "clangd", "rust_analyzer", "qmlls" })
+          vim.lsp.enable({ "lua_ls", "nil_ls", "clangd", "rust_analyzer", "qmlls" })
           
           vim.diagnostic.config({
             virtual_text = true,
@@ -488,7 +488,6 @@
         runtimeInputs = with pkgs; [
           lua-language-server
           nil
-          ltex-ls
           clang-tools
           kdePackages.qtdeclarative
           rust-analyzer

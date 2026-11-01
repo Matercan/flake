@@ -14,7 +14,7 @@
         shuffle
       ];
       theme = spicePkgs.themes.catppuccin;
-      colorScheme = "macchiato";
+      colorScheme = "latte";
     };
   };
 }

@@ -13,7 +13,7 @@
         (inputs.wrappers.wrapperModules.bat.apply {
           inherit pkgs;
           "bat-config".content = ''
-            --theme="Catppuccin Macchiato"
+            --theme="Catppuccin Latte"
           '';
         }).wrapper;
     };

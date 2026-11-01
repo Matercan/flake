@@ -7,9 +7,9 @@
         font_family = "Fairfax SM";
         
         font_size = 12;
-        background_opacity = 0.9;
-        background = "#363a4f";
-        foreground = "#cad3f5";
+        background = "#eff1f5";
+        foreground = "#5752b0";
+        theme = "Catppuccin-Latte";
       };
     }).wrapper;
   };

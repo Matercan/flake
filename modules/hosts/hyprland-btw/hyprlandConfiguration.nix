@@ -1,7 +1,18 @@
-{ inputs, lib, moduleWithSystem, ... }:
+{
+  inputs,
+  lib,
+  moduleWithSystem,
+  ...
+}:
 {
   flake.nixosModules.hyprlandConfiguration = moduleWithSystem (
-    { pkgs, inputs', self', system, ... }:
+    {
+      pkgs,
+      inputs',
+      self',
+      system,
+      ...
+    }:
     {
       networking = {
         hostName = "hyprland-btw";
@@ -17,23 +28,26 @@
 
       programs.xwayland.enable = true;
 
-      environment.systemPackages = with pkgs; [
-        inputs'.zen-browser.packages.default
-        inputs'.hyprland.packages.default
-        proton-vpn
-        prismlauncher
-        vicinae
-        wl-clipboard
-        grim
-        slurp
-      ] ++ (with self'.packages; [
-        xcursor-pixel 
-        spicetify 
-        hyprland
-        nvim 
-        nvim-config
-        kitty
-      ]);
+      environment.systemPackages =
+        with pkgs;
+        [
+          inputs'.zen-browser.packages.default
+          inputs'.hyprland.packages.default
+          proton-vpn
+          prismlauncher
+          vicinae
+          wl-clipboard
+          grim
+          slurp
+        ]
+        ++ (with self'.packages; [
+          xcursor-pixel
+          spicetify
+          hyprland
+          nvim
+          nvim-config
+          kitty
+        ]);
 
       fonts.packages = with pkgs; [
         noto-fonts
@@ -74,25 +88,37 @@
       programs.nixcord = {
         enable = true;
         user = "lili";
-        equibop.enable = true; 
+        equibop.enable = true;
         discord.equicord.enable = true;
 
-        config.plugins = 
+        config.plugins =
           let
             basicPlugins = [
-              "webRichPresence" "betterFolders" 
-              "betterGifPicker" "betterRoleDot"
-              "crashHandler" "customRpc" 
-              "dontRoundMyTimestamps" "fakeNitro" 
-              "fixImagesQuality" "fixYoutubeEmbeds" 
-              "gifPaste" "petpet" "youtubeAdblock" 
-              "betterActivities" "gifMaker" 
-              "noNitroUpsell" "cancelFriendRequest"
-              "richPresence" "rpcEditor"
+              "webRichPresence"
+              "betterFolders"
+              "betterGifPicker"
+              "betterRoleDot"
+              "crashHandler"
+              "customRpc"
+              "dontRoundMyTimestamps"
+              "fakeNitro"
+              "fixImagesQuality"
+              "fixYoutubeEmbeds"
+              "gifPaste"
+              "petpet"
+              "youtubeAdblock"
+              "betterActivities"
+              "gifMaker"
+              "noNitroUpsell"
+              "cancelFriendRequest"
+              "richPresence"
+              "rpcEditor"
               "splitLargeMessages"
             ];
 
-            enabledPlugins = lib.genAttrs basicPlugins (name: { enable = true; });
+            enabledPlugins = lib.genAttrs basicPlugins (name: {
+              enable = true;
+            });
 
             customPlugins = {
               musicRichPresence = {
@@ -113,15 +139,30 @@
               };
             };
           in
-        enabledPlugins // customPlugins;
+          enabledPlugins // customPlugins;
       };
+
+      services.gnome.gnome-keyring.enable = true;
 
       programs.steam = {
         enable = true;
         gamescopeSession.enable = true;
       };
 
-      imports = [ ./_hardware-configuration.nix inputs.nixcord.nixosModules.nixcord ];
+      i18n.inputMethod = {
+        enable = true;
+        type = "fcitx5";
+        fcitx5.addons = with pkgs; [
+          fcitx5-gtk 
+          fcitx5-mozc
+          kdePackages.fcitx5-chinese-addons
+        ];
+      };
+
+      imports = [
+        ./_hardware-configuration.nix
+        inputs.nixcord.nixosModules.nixcord
+      ];
     }
   );
 }
